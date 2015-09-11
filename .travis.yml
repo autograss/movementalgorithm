@@ -1,0 +1,16 @@
+language: c++
+compiler: g++
+before_script:
+- git clone https://github.com/LucianoPC/test_node.git
+- sudo apt-get install libcppunit-dev g++-4.9
+script:
+- make run_tests
+branches:
+  only:
+  - master
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.9
