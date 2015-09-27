@@ -1,5 +1,5 @@
-TARGET        := node
-TARGET_TEST   := node_test
+TARGET        := movimentalgorithm
+TARGET_TEST   := movimentalgorithm_tests
 SOURCE_DIR    := source
 OBJ_DIR       := obj
 INCLUDE_DIR   := include
@@ -18,7 +18,8 @@ LIB           :=
 INC           := -I $(INCLUDE_DIR)
 
 CXX           := g++-4.9
-CXXFLAGS      := -g -W -O3 -pedantic
+CXXFLAGS      := -g -W -O3 -pedantic -Wall -ansi -std=c++11
+OPENCVFLAGS		:= -lopencv_core -lopencv_imgproc -lopencv_highgui
 
 RM            := rm -f
 
@@ -27,11 +28,11 @@ all: clean $(TARGET)
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(BIN_DIR)
 	@echo " Linking..."
-	@echo " $(CXX) $^ -o $(TARGET) $(LIB)"; $(CXX) $^ -o $(BIN_DIR)/$(TARGET) $(LIB)
+	@echo " $(CXX) $^ -o $(TARGET) $(LIB) $(OPENCVFLAGS)"; $(CXX) $^ -o $(BIN_DIR)/$(TARGET) $(LIB) $(OPENCVFLAGS)
 
 $(OBJ_DIR)/%.o: $(SOURCE_DIR)/%.$(SOURCE_EXT)
 	@mkdir -p $(OBJ_DIR)
-	@echo " $(CXX) $(CXXFLAGS) $(INC) -c -o $@ $<"; $(CXX) $(CXXFLAGS) $(INC) -c -o $@ $<
+	@echo " $(CXX) $(INC) -c -o $@ $< $(CXXFLAGS)"; $(CXX) $(INC) -c -o $@ $< $(CXXFLAGS)
 
 run: $(TARGET)
 	./$(BIN_DIR)/$(TARGET)
