@@ -11,7 +11,6 @@
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/XmlOutputter.h>
 
-#include <iostream>
 #include "node.hpp"
 
 using namespace std;
@@ -48,14 +47,3 @@ public:
     CPPUNIT_ASSERT(nodeTwo->prev == nodeOne);
   }
 };
-
-int main()
-{
-  CppUnit::TextUi::TestRunner runner;
-
-  runner.addTest(NodeTest::suit());
-
-  bool wasSucessful = !runner.run();
-
-  return wasSucessful;
-}

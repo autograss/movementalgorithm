@@ -41,10 +41,10 @@ clean:
 	@echo " Cleaning...";
 	$(RM) -r $(OBJ_DIR) $(BIN_DIR)
 
-run_tests: $(TARGET) $(OBJECTS_TESTS)
+run_tests: clean $(TARGET) $(OBJECTS_TESTS)
 	@echo " Linking Tests..."
 	@echo " $(RM) $(OBJ_DIR)/$(MAIN_SOURCE).o"; $(RM) $(OBJ_DIR)/$(MAIN_SOURCE).o
-	@echo " $(CXX) $(filter-out obj/$(MAIN_SOURCE).o,$(OBJECTS)) $(OBJECTS_TESTS) -o $(TARGET_TEST) $(LIB) -lcppunit"; $(CXX) $(filter-out obj/$(MAIN_SOURCE).o,$(OBJECTS)) $(OBJECTS_TESTS) -o $(BIN_DIR)/$(TARGET_TEST) $(LIB) -lcppunit
+	@echo " $(CXX) $(filter-out obj/$(MAIN_SOURCE).o,$(OBJECTS)) $(OBJECTS_TESTS) -o $(TARGET_TEST) $(LIB) $(OPENCVFLAGS) -lcppunit"; $(CXX) $(filter-out obj/$(MAIN_SOURCE).o,$(OBJECTS)) $(OBJECTS_TESTS) -o $(BIN_DIR)/$(TARGET_TEST) $(LIB) $(OPENCVFLAGS) -lcppunit
 	@echo ""
 	./$(BIN_DIR)/$(TARGET_TEST)
 
