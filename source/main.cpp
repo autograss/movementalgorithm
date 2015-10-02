@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
   // Identify image pixels without objects
   cv::Mat bg;
-  cv::dilate(binary,bg,cv::Mat(),cv::Point(-1,-1),3);
+  cv::dilate(binary,bg,cv::Mat(),cv::Point(-1,-1), 3);
   cv::threshold(bg, bg, 1, 128, cv::THRESH_BINARY_INV);
   cv::imshow("bg", bg);
 

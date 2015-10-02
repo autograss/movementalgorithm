@@ -11,6 +11,7 @@ public:
 
   cv::Mat getBinaryImage(unsigned int pixelsToBinary, unsigned int pixelBinary);
   cv::Mat getBinaryForegroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary);
+  cv::Mat getBinaryBackgroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor);
 
   int getWidth();
   int getHeight();

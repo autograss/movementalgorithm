@@ -26,11 +26,22 @@ Image::getBinaryImage(unsigned int pixelsToBinary, unsigned int pixelBinary)
 cv::Mat
 Image::getBinaryForegroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary)
 {
-  cv::Mat fg;
+  cv::Mat foreground;
   cv::Mat binary = getBinaryImage(pixelsToBinary, pixelBinary);
-  cv::erode(binary, fg, cv::Mat(), cv::Point( -1, -1), 2);
+  cv::erode(binary, foreground, cv::Mat(), cv::Point( -1, -1), 2);
 
-  return fg;
+  return foreground;
+}
+
+cv::Mat
+Image::getBinaryBackgroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor)
+{
+  cv::Mat background;
+  cv::Mat binary = getBinaryImage(pixelsToBinary, pixelBinary);
+  cv::dilate(binary,background,cv::Mat(),cv::Point(-1,-1), 3);
+  cv::threshold(background, background, 1, backgroundColor, cv::THRESH_BINARY_INV);
+
+  return background;
 }
 
 cv::Mat
