@@ -38,10 +38,23 @@ Image::getBinaryBackgroundImage(unsigned int pixelsToBinary, unsigned int pixelB
 {
   cv::Mat background;
   cv::Mat binary = getBinaryImage(pixelsToBinary, pixelBinary);
-  cv::dilate(binary,background,cv::Mat(),cv::Point(-1,-1), 3);
+  cv::dilate(binary, background, cv::Mat(), cv::Point(-1,-1), 3);
   cv::threshold(background, background, 1, backgroundColor, cv::THRESH_BINARY_INV);
 
   return background;
+}
+
+cv::Mat
+Image::getBinaryMarkersImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor)
+{
+  cv::Mat binary = getBinaryImage(pixelsToBinary, pixelBinary);
+  cv::Mat foreground = getBinaryForegroundImage(pixelsToBinary, pixelBinary);
+  cv::Mat background = getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor);
+
+  cv::Mat markers(binary.size(), CV_8U, cv::Scalar(0));
+  markers = foreground + background;
+
+  return markers;
 }
 
 cv::Mat

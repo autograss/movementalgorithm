@@ -26,6 +26,7 @@ public:
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryImage", &ImageTest::testBinaryImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryForegroundImage", &ImageTest::testBinaryForegroundImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryBackgroundImage", &ImageTest::testBinaryBackgroundImage));
+    suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryMarkersImage", &ImageTest::testBinaryMarkersImage));
 
     return suitOfTests;
   }
@@ -90,6 +91,23 @@ public:
       {
         float pixelValue = (float)binaryBackgroundImage.at<uchar>(row, col);
         CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == backgroundColor) );
+      }
+    }
+  }
+
+  void testBinaryMarkersImage()
+  {
+    int backgroundColor = 125;
+    Image image("test/images/grass_test_01.png");
+
+    cv::Mat BinaryMarkersImage = image.getBinaryMarkersImage(100, 255, backgroundColor);
+
+    for(int row = 0; row < BinaryMarkersImage.rows; row++)
+    {
+      for(int col = 0; col < BinaryMarkersImage.row(row).cols; col++)
+      {
+        float pixelValue = (float)BinaryMarkersImage.at<uchar>(row, col);
+        CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
       }
     }
   }
