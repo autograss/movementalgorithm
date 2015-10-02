@@ -88,3 +88,8 @@ Image::getHeight()
 {
   return this->cvImage.rows;
 }
+
+void
+Image::show(std::string label, cv::Mat image){
+  cv::imshow(label, image);
+}

@@ -20,6 +20,7 @@ public:
 
   cv::Mat getCvImage();
 
+  static void show(std::string label, cv::Mat image);
 private:
   cv::Mat cvImage;
 };
