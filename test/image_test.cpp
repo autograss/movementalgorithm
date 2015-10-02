@@ -101,13 +101,13 @@ public:
     int backgroundColor = 125;
     Image image("test/images/grass_test_01.png");
 
-    cv::Mat BinaryMarkersImage = image.getBinaryMarkersImage(100, 255, backgroundColor);
+    cv::Mat binaryMarkersImage = image.getBinaryMarkersImage(100, 255, backgroundColor);
 
-    for(int row = 0; row < BinaryMarkersImage.rows; row++)
+    for(int row = 0; row < binaryMarkersImage.rows; row++)
     {
-      for(int col = 0; col < BinaryMarkersImage.row(row).cols; col++)
+      for(int col = 0; col < binaryMarkersImage.row(row).cols; col++)
       {
-        float pixelValue = (float)BinaryMarkersImage.at<uchar>(row, col);
+        float pixelValue = (float)binaryMarkersImage.at<uchar>(row, col);
         CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
       }
     }
@@ -118,13 +118,13 @@ public:
     int backgroundColor = 125;
     Image image("test/images/grass_test_01.png");
 
-    cv::Mat BinaryWatershedSegmenterImage = image.getBinaryWatershedSegmenterImage(100, 255, backgroundColor);
+    cv::Mat binaryWatershedSegmenterImage = image.getBinaryWatershedSegmenterImage(100, 255, backgroundColor);
 
-    for(int row = 0; row < BinaryWatershedSegmenterImage.rows; row++)
+    for(int row = 0; row < binaryWatershedSegmenterImage.rows; row++)
     {
-      for(int col = 0; col < BinaryWatershedSegmenterImage.row(row).cols; col++)
+      for(int col = 0; col < binaryWatershedSegmenterImage.row(row).cols; col++)
       {
-        float pixelValue = (float)BinaryWatershedSegmenterImage.at<uchar>(row, col);
+        float pixelValue = (float)binaryWatershedSegmenterImage.at<uchar>(row, col);
         CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
       }
     }
