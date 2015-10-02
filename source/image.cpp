@@ -58,6 +58,20 @@ Image::getBinaryMarkersImage(unsigned int pixelsToBinary, unsigned int pixelBina
 }
 
 cv::Mat
+Image::getBinaryWatershedSegmenterImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor)
+{
+  cv::Mat markers = getBinaryMarkersImage(pixelsToBinary, pixelBinary, backgroundColor);
+
+  WatershedSegmenter segmenter;
+  segmenter.setMarkers(markers);
+
+  cv::Mat result = segmenter.process(this->cvImage);
+  result.convertTo(result, CV_8U);
+
+  return result;
+}
+
+cv::Mat
 Image::getCvImage()
 {
   return this->cvImage;

@@ -27,6 +27,7 @@ public:
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryForegroundImage", &ImageTest::testBinaryForegroundImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryBackgroundImage", &ImageTest::testBinaryBackgroundImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryMarkersImage", &ImageTest::testBinaryMarkersImage));
+    suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryWatershedSegmenterImage", &ImageTest::testBinaryWatershedSegmenterImage));
 
     return suitOfTests;
   }
@@ -107,6 +108,23 @@ public:
       for(int col = 0; col < BinaryMarkersImage.row(row).cols; col++)
       {
         float pixelValue = (float)BinaryMarkersImage.at<uchar>(row, col);
+        CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
+      }
+    }
+  }
+
+  void testBinaryWatershedSegmenterImage()
+  {
+    int backgroundColor = 125;
+    Image image("test/images/grass_test_01.png");
+
+    cv::Mat BinaryWatershedSegmenterImage = image.getBinaryWatershedSegmenterImage(100, 255, backgroundColor);
+
+    for(int row = 0; row < BinaryWatershedSegmenterImage.rows; row++)
+    {
+      for(int col = 0; col < BinaryWatershedSegmenterImage.row(row).cols; col++)
+      {
+        float pixelValue = (float)BinaryWatershedSegmenterImage.at<uchar>(row, col);
         CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
       }
     }
