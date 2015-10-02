@@ -24,6 +24,16 @@ Image::getBinaryImage(unsigned int pixelsToBinary, unsigned int pixelBinary)
 }
 
 cv::Mat
+Image::getBinaryForegroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary)
+{
+  cv::Mat fg;
+  cv::Mat binary = getBinaryImage(pixelsToBinary, pixelBinary);
+  cv::erode(binary, fg, cv::Mat(), cv::Point( -1, -1), 2);
+
+  return fg;
+}
+
+cv::Mat
 Image::getCvImage()
 {
   return this->cvImage;

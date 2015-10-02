@@ -10,9 +10,11 @@ public:
   Image(std::string imagePath);
 
   cv::Mat getBinaryImage(unsigned int pixelsToBinary, unsigned int pixelBinary);
+  cv::Mat getBinaryForegroundImage(unsigned int pixelsToBinary, unsigned int pixelBinary);
 
   int getWidth();
   int getHeight();
+
   cv::Mat getCvImage();
 
 private:
