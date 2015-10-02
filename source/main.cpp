@@ -1,18 +1,26 @@
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-#include <vector>
 #include <opencv2/opencv.hpp>
+#include <string>
 
 
-bool isWhitePixel(uchar *ptr, int j);
-float matMeanRow(const cv::Mat &mat, int row, int indexBegin, int numberElements);
-void printLeftBlack(cv::Mat &mat, int row, int col);
-void convertImageIntoBlackAndWhite(cv::Mat &grayscaleMat);
-void convertImageIntoBlackAndWhite2(cv::Mat &grayscaleMat);
+class WatershedSegmenter{
+private:
+  cv::Mat markers;
+public:
+  void setMarkers(cv::Mat& markerImage)
+  {
+    markerImage.convertTo(markers, CV_32S);
+  }
+
+  cv::Mat process(cv::Mat &image)
+  {
+    cv::watershed(image, markers);
+    markers.convertTo(markers,CV_8U);
+    return markers;
+  }
+};
 
 
-int main(int argc, char** argv )
+int main(int argc, char* argv[])
 {
   if ( argc != 2 )
   {
@@ -20,163 +28,39 @@ int main(int argc, char** argv )
     return -1;
   }
 
-  //Our color image
-  cv::Mat imageMat = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-  if (imageMat.empty())
-  {
-          std::cerr << "ERROR: Could not read image " << argv[1] << std::endl;
-          return 1;
-  }
+  cv::Mat image = cv::imread(argv[1]);
+  cv::Mat binary;
+  cv::cvtColor(image, binary, CV_BGR2GRAY);
+  cv::threshold(binary, binary, 100, 255, cv::THRESH_BINARY);
 
-  //Grayscale matrix
-  cv::Mat grayscaleMat (imageMat.size(), CV_8U);
+  cv::imshow("originalimage", image);
+  cv::imshow("originalbinary", binary);
 
-  //Convert BGR to Gray
-  cv::cvtColor(imageMat, grayscaleMat, CV_BGR2GRAY);
+  // Eliminate noise and smaller objects
+  cv::Mat fg;
+  cv::erode(binary, fg, cv::Mat(), cv::Point( -1, -1), 2);
+  cv::imshow("fg", fg);
 
-  //Binary image
-  cv::Mat binaryMat(grayscaleMat.size(), grayscaleMat.type());
+  // Identify image pixels without objects
+  cv::Mat bg;
+  cv::dilate(binary,bg,cv::Mat(),cv::Point(-1,-1),3);
+  cv::threshold(bg, bg, 1, 128, cv::THRESH_BINARY_INV);
+  cv::imshow("bg", bg);
 
-  //Apply thresholding
-  cv::threshold(grayscaleMat, binaryMat, 125, 255, cv::THRESH_BINARY);
+  // Create markers image
+  cv::Mat markers(binary.size(), CV_8U, cv::Scalar(0));
+  markers = fg + bg;
+  cv::imshow("markers", markers);
 
-  std::cout << "M[0] = " << std::endl << grayscaleMat.row(0) << std::endl << std::endl;
-  std::cout << "M width = " << grayscaleMat.cols << std::endl;
+  // Create watershed segmentation object
+  WatershedSegmenter segmenter;
+  segmenter.setMarkers(markers);
 
-  //convertImageIntoBlackAndWhite(grayscaleMat);
-  //convertImageIntoBlackAndWhite(binaryMat);
-
-  //Show the results
-  cv::namedWindow("Output", cv::WINDOW_AUTOSIZE);
-  cv::imshow("Output", binaryMat);
+  cv::Mat result = segmenter.process(image);
+  result.convertTo(result, CV_8U);
+  cv::imshow("final_result", result);
 
   cv::waitKey(0);
+
   return 0;
 }
-
-
-bool isWhitePixel(uchar *ptr, int j)
-{
-  return ptr[3*j+2] > 200 and ptr[3*j+1] > 200 and ptr[3*j+0] > 200;
-}
-
-
-float matMeanRow(const cv::Mat &mat, int row, int indexBegin, int numberElements)
-{
-  float sum = 0;
-
-  for(int i = indexBegin; i < (indexBegin + numberElements); i++)
-  {
-    sum += (float)mat.at<uchar>(row, i);
-  }
-
-  return sum / numberElements;
-}
-
-float matrixMeanCol(const std::vector< std::vector<float> > &matrix, int row, int col, int indexBegin, int numberElements)
-{
-  float sum = 0;
-
-  for(int i = indexBegin; i < (indexBegin + numberElements); i++)
-  {
-    sum += matrix[row][i];
-  }
-
-  return sum / numberElements;
-}
-
-
-void printLeftBlack(cv::Mat &mat, int row, int col)
-{
-  for(int i = 0; i < col; i++)
-  {
-    //std::cout << "i: " << i << "; pixel: " <<  mat.row(row).col(i) << std::endl;
-    mat.row(row).col(i) = 0.0f;
-  }
-  for(int i = col; i < mat.row(row).cols; i++)
-  {
-    mat.row(row).col(i) = 255.0f;
-  }
-}
-
-
-void convertImageIntoBlackAndWhite(cv::Mat &grayscaleMat)
-{
-  int scale = 20;
-  float prevMean = 0, mean = 0, deltaMean = 20.0f;
-
-  for(int row = 0; row < grayscaleMat.rows; row++)
-  {
-    for(int i = 0; (i*scale) + (scale / 2) < grayscaleMat.row(row).cols; i++)
-    {
-      if(i == 0)
-        prevMean = mean;
-      else
-        prevMean = (prevMean + mean) / 2.0f;
-
-      mean = matMeanRow(grayscaleMat, row, i * scale, scale);
-
-      //std::cout << "mean[" << i*scale << "] = " << matMeanRow(grayscaleMat, row, i * scale, scale) << std::endl;
-
-      if(abs(mean - prevMean) >= deltaMean)
-      {
-        int col = (i*scale) + (scale / 2);
-        //std::cout << "AQUI: " << col << std::endl;
-        printLeftBlack(grayscaleMat, row, col);
-        break;
-      }
-    }
-  }
-}
-
-void convertImageIntoBlackAndWhite2(cv::Mat &grayscaleMat)
-{
-  int scale = 20;
-  float mean = 0.0f;
-  std::vector< std::vector<float> > matrixMean;
-
-  for(int row = 0; row < grayscaleMat.rows; row++)
-  {
-    std::vector<float> vectorMean;
-    for(int i = 0; (i*scale) + (scale / 2) < grayscaleMat.row(row).cols; i++)
-    {
-      mean = matMeanRow(grayscaleMat, row, i * scale, scale);
-      vectorMean.push_back(mean);
-      //std::cout << "mean[" << i*scale << "] = " << matMeanRow(grayscaleMat, row, i * scale, scale) << std::endl;
-    }
-    matrixMean.push_back(vectorMean);
-  }
-
-
-  std::vector< std::vector<float> > fMatrixMean;
-  for(unsigned int i = 0; (i*scale) + (scale / 2) < matrixMean.size(); i++)
-  {
-    std::vector<float> fVectorMean;
-
-    for(unsigned int j = 0; j < fMatrixMean[i].size(); j++)
-    {
-    }
-  }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
