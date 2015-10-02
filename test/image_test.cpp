@@ -11,6 +11,7 @@
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/XmlOutputter.h>
 
+#include <opencv2/opencv.hpp>
 #include "image.hpp"
 
 class ImageTest : public CppUnit::TestFixture
@@ -21,6 +22,8 @@ public:
     CppUnit::TestSuite *suitOfTests = new CppUnit::TestSuite("ImageTest");
 
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testInstanceNewImage", &ImageTest::testInstanceNewImage));
+    suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testLoadImage", &ImageTest::testLoadImage));
+    suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryImage", &ImageTest::testBinaryImage));
 
     return suitOfTests;
   }
@@ -38,5 +41,21 @@ public:
 
     CPPUNIT_ASSERT(image.getWidth() == 550);
     CPPUNIT_ASSERT(image.getHeight() == 177);
+  }
+
+  void testBinaryImage()
+  {
+    Image image("test/images/grass_test_01.png");
+
+    cv::Mat binaryImage = image.getBinaryImage(100, 255);
+
+    for(int row = 0; row < binaryImage.rows; row++)
+    {
+      for(int col = 0; col < binaryImage.row(row).cols; col++)
+      {
+        float pixelValue = (float)binaryImage.at<uchar>(row, col);
+        CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) );
+      }
+    }
   }
 };
