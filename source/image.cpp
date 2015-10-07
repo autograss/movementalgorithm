@@ -72,9 +72,29 @@ Image::getBinaryWatershedSegmenterImage(unsigned int pixelsToBinary, unsigned in
 }
 
 cv::Mat
-Image::getCvImage()
+Image::convertInBlackAndWhiteByStrip(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor)
 {
-  return this->cvImage;
+  cv::Mat watershed = getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor);
+
+  for(int row = 0; row < watershed.rows; row++)
+  {
+    for(int col = 0; col < watershed.row(row).cols; col++)
+    {
+      unsigned int pixelColor = (unsigned int)watershed.at<uchar>(row, col);
+      if(pixelColor == backgroundColor)
+      {
+        watershed.row(row).col(col) = 0.0f;
+      }
+    }
+  }
+
+  return watershed;
+}
+
+std::vector< std::vector<int> >
+Image::getPixelMatrix()
+{
+  return Image::getPixelMatrix(this->cvImage);
 }
 
 int
@@ -89,7 +109,33 @@ Image::getHeight()
   return this->cvImage.rows;
 }
 
+cv::Mat
+Image::getCvImage()
+{
+  return this->cvImage;
+}
+
 void
 Image::show(std::string label, cv::Mat image){
   cv::imshow(label, image);
+}
+
+std::vector< std::vector<int> >
+Image::getPixelMatrix(cv::Mat image)
+{
+  std::vector< std::vector<int> > pixelMatrix;
+
+  for(int row = 0; row < image.rows; row++)
+  {
+    std::vector<int> vectorColumn;
+    for(int col = 0; col < image.row(row).cols; col++)
+    {
+      int pixelColor = image.at<uchar>(row, col);
+      vectorColumn.push_back(pixelColor);
+    }
+    pixelMatrix.push_back(vectorColumn);
+  }
+
+  return pixelMatrix;
+
 }

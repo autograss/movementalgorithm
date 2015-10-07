@@ -3,6 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <vector>
 
 class Image
 {
@@ -15,12 +16,17 @@ public:
   cv::Mat getBinaryMarkersImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor);
   cv::Mat getBinaryWatershedSegmenterImage(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor);
 
+  cv::Mat convertInBlackAndWhiteByStrip(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor);
+
+  std::vector< std::vector<int> > getPixelMatrix();
+
   int getWidth();
   int getHeight();
 
   cv::Mat getCvImage();
 
   static void show(std::string label, cv::Mat image);
+  static std::vector< std::vector<int> > getPixelMatrix(cv::Mat image);
 private:
   cv::Mat cvImage;
 };

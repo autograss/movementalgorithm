@@ -12,6 +12,7 @@
 #include <cppunit/XmlOutputter.h>
 
 #include <opencv2/opencv.hpp>
+#include <vector>
 #include "image.hpp"
 
 class ImageTest : public CppUnit::TestFixture
@@ -28,6 +29,7 @@ public:
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryBackgroundImage", &ImageTest::testBinaryBackgroundImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryMarkersImage", &ImageTest::testBinaryMarkersImage));
     suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testBinaryWatershedSegmenterImage", &ImageTest::testBinaryWatershedSegmenterImage));
+    suitOfTests->addTest(new CppUnit::TestCaller<ImageTest>("testGetPixelMatrix", &ImageTest::testGetPixelMatrix));
 
     return suitOfTests;
   }
@@ -126,6 +128,23 @@ public:
       {
         float pixelValue = (float)binaryWatershedSegmenterImage.at<uchar>(row, col);
         CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) || (pixelValue == backgroundColor) );
+      }
+    }
+  }
+
+  void testGetPixelMatrix()
+  {
+    Image image("test/images/grass_test_01.png");
+
+    cv::Mat binaryImage = image.getBinaryImage(100, 255);
+    std::vector< std::vector<int> > pixelMatrix = Image::getPixelMatrix(binaryImage);
+
+    for(unsigned int row = 0; row < pixelMatrix.size(); row++)
+    {
+      for(unsigned int col = 0; col < pixelMatrix[row].size(); col++)
+      {
+        int pixelValue = pixelMatrix[row][col];
+        CPPUNIT_ASSERT( (pixelValue == 0) || (pixelValue == 255) );
       }
     }
   }
