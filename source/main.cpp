@@ -5,10 +5,16 @@
 
 int main(int argc, char* argv[])
 {
-  if ( argc != 2 )
+  if(argc < 2)
   {
     std::cout << "Usage: " << argv[0] << " <image_path>" << std::endl;
     return -1;
+  }
+
+  std::string saveFilePath = "";
+  if(argc > 2)
+  {
+    saveFilePath = argv[2];
   }
 
   Image image(argv[1]);
@@ -25,8 +31,12 @@ int main(int argc, char* argv[])
 
   Image::show("Black and White", image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor));
 
-  //cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
-  //cv::imwrite("campo_de_futebol_black_white.jpg", blackWhite);
+  if(!saveFilePath.empty())
+  {
+    cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
+    cv::imwrite(saveFilePath, blackWhite);
+  }
+
   cv::waitKey(0);
 
   return 0;

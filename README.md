@@ -16,3 +16,8 @@ Compile with the command:
 Run program with the command:
 
   $./bin/movimentalgorithm [image_path]
+
+To save image the black white image use the command:
+
+  $./bin/movimentalgorithm [image_path] [save_image_path]
+
