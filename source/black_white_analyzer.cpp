@@ -1,5 +1,5 @@
 #include <iostream>
-#include "black_white_analyzer.h"
+#include "black_white_analyzer.hpp"
 #include <vector>
 
 #define PIXELS_ERROR 10
@@ -9,18 +9,14 @@ using namespace std;
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vector<vector<int> > matrix) {
 
-
 	vector<int> distance_from_column_of_reference;
 	vector<int> columns;
 	int x = 0;
-	int i = 0;
+	unsigned int i = 0;
 	int collumn_of_reference = -1;
 
-
-		for(int j=0; j<WIDTH_SIZE-1; j++) {
-
+		for(unsigned int j=0; j<matrix[0].size()-1; j++) {
 			if(matrix[i][j+1] == 255 ){
-
 				if(collumn_of_reference == -1) {
 					collumn_of_reference = j;
 				}
@@ -29,12 +25,18 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 				columns.push_back(j);
 				j=0;
 
-				if(i<HEIGHT_SIZE)
+				if(i<matrix.size())
 					i++;
-			}			
+			}
+
+      if( (j == matrix[0].size()-2) and (collumn_of_reference == -1) )
+      {
+        j = 0;
+        i++;
+      }
 		}
 
-		for(int j = 0 ; j < distance_from_column_of_reference.size(); j++) {
+		for(unsigned int j = 0 ; j < distance_from_column_of_reference.size(); j++) {
 			x += distance_from_column_of_reference[j];
 		}
 		cout<<"X: "<<x<<endl;
@@ -64,5 +66,4 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 	// cout<<"Pixels alinhados!"<<endl;
 
 	return BlackWhiteAnalyzer::go_foward;
-
 }

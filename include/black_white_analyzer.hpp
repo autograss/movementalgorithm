@@ -7,21 +7,10 @@ using namespace std;
 const int WIDTH_SIZE = 50;
 const int HEIGHT_SIZE = 50;
 
-
-
-
 class BlackWhiteAnalyzer
 {
-
   public:
-
-
-
-
     BlackWhiteAnalyzer(){};
-
-    
-
 
     typedef enum instruction {
     	go_foward,
@@ -29,12 +18,8 @@ class BlackWhiteAnalyzer
     	go_right
     }instruction;
 
-
     instruction analyzeMatrixOfPixels (vector<vector<int> >);
 
   private:
-
-};    
-
-
+};
 #endif
