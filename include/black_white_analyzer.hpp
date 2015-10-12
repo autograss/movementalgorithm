@@ -1,6 +1,7 @@
 #ifndef BLACK_WHITE_ANALYZER_H
 #define BLACK_WHITE_ANALYZER_H
 #include <vector>
+#include "image.hpp"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ class BlackWhiteAnalyzer
     }instruction;
 
     instruction analyzeMatrixOfPixels (vector<vector<int> >);
+    instruction getInstruction (Image image, unsigned int pixelsToBinary,
+                                unsigned int pixelBinary, unsigned int backgroundColor);
 
   private:
 };

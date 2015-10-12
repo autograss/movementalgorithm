@@ -39,7 +39,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 		for(unsigned int j = 0 ; j < distance_from_column_of_reference.size(); j++) {
 			x += distance_from_column_of_reference[j];
 		}
-		cout<<"X: "<<x<<endl;
+		// cout<<"X: "<<x<<endl;
 
 		if (x < -PIXELS_ERROR){
 			return BlackWhiteAnalyzer::go_left;
@@ -66,4 +66,16 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 	// cout<<"Pixels alinhados!"<<endl;
 
 	return BlackWhiteAnalyzer::go_foward;
+}
+
+BlackWhiteAnalyzer::instruction
+BlackWhiteAnalyzer::getInstruction (Image image, unsigned int pixelsToBinary,
+                                    unsigned int pixelBinary, unsigned int backgroundColor)
+{
+    BlackWhiteAnalyzer analyzer;
+    std::vector< std::vector<int> > matrixPixels;
+
+    cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
+    matrixPixels = Image::getPixelMatrix(blackWhite);
+    return analyzer.analyzeMatrixOfPixels(matrixPixels);
 }

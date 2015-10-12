@@ -14,6 +14,7 @@
 #include <iostream>
 #include "node_test.cpp"
 #include "image_test.cpp"
+#include "black_white_analyzer_test.cpp"
 
 
 int main()
@@ -21,7 +22,7 @@ int main()
   CppUnit::TextUi::TestRunner runner;
 
   runner.addTest(NodeTest::suit());
-  runner.addTest(ImageTest::suit());
+  runner.addTest(BlackWhiteAnalyzerTest::suit());
 
   bool wasSucessful = !runner.run();
 
