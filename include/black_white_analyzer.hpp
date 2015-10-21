@@ -14,7 +14,7 @@ class BlackWhiteAnalyzer
     BlackWhiteAnalyzer(){};
 
     typedef enum instruction {
-    	go_foward,
+    	go_foward = 0,
     	go_left,
     	go_right
     }instruction;
