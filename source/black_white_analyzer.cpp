@@ -3,11 +3,24 @@
 #include <vector>
 
 #define PIXELS_ERROR 10
+#define MATRIX_DISPLACEMENT_ERROR 20
+
 
 using namespace std;
 
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vector<vector<int> > matrix) {
+
+	BlackWhiteAnalyzer::instruction result = generateCommand(matrix);
+
+	if(result == go_foward){
+		result =  verifyCenterMatrix(matrix);
+	}
+	
+	return result;
+}
+
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vector<int> > matrix) {
 
 	vector<int> distance_from_column_of_reference;
 	vector<int> columns;
@@ -51,22 +64,51 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 			return BlackWhiteAnalyzer::go_right;
 		}
 
-	// x = columns[0];
+	return BlackWhiteAnalyzer::go_foward;
 
 
-	// for(int i=0; i < columns.size(); i++){
+}
 
-	// 	if(x != columns[i]) {
-	// 		cout<<"Pixels não alinhados!"<<endl;
-	// 		return BlackWhiteAnalyzer::go_left;
-	// 	}
 
-	// }
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyCenterMatrix(vector<vector<int> > matrix) {
+	
+	int number_of_collumns = matrix[0].size();
+	int count_before_line = 0;
+	int count_after_line = 0;
+	bool before_the_middle = true;
 
-	// cout<<"Pixels alinhados!"<<endl;
+	for(unsigned int j=0; j<number_of_collumns - 1; j++) {
+
+		if(before_the_middle)
+			count_before_line++;
+
+		if(before_the_middle == false && matrix[0][j] == 0) {
+			count_after_line++;
+		}
+
+		if(matrix[0][j+1] == 255 ){
+			before_the_middle = false;
+		} 
+	}
+
+	float x = count_before_line - count_after_line;
+
+	if (x < -MATRIX_DISPLACEMENT_ERROR){
+			return BlackWhiteAnalyzer::go_left;
+	}
+	else if (x == 0 || (x > -MATRIX_DISPLACEMENT_ERROR && x < MATRIX_DISPLACEMENT_ERROR)) {
+		return BlackWhiteAnalyzer::go_foward;
+	}
+	else if (x > MATRIX_DISPLACEMENT_ERROR) {
+		return BlackWhiteAnalyzer::go_right;
+	}
 
 	return BlackWhiteAnalyzer::go_foward;
 }
+
+
+
+
 
 BlackWhiteAnalyzer::instruction
 BlackWhiteAnalyzer::getInstruction (Image image, unsigned int pixelsToBinary,
