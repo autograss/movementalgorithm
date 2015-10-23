@@ -23,21 +23,20 @@ int main(int argc, char* argv[])
   unsigned int backgroundColor = 125;
 
   BlackWhiteAnalyzer analyzer;
-  std::vector< std::vector<int> > matrixPixels;
+  //std::vector< std::vector<int> > matrixPixels;
   BlackWhiteAnalyzer::instruction instructionDirection;
 
-  Image::show("Original", image.getCvImage());
-  Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
-  Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
-  Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
-  Image::show("Markers", image.getBinaryMarkersImage(pixelsToBinary, pixelBinary, backgroundColor));
-  Image::show("Watershed", image.getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor));
+  //Image::show("Original", image.getCvImage());
+  //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
+  //Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
+  //Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
+  //Image::show("Markers", image.getBinaryMarkersImage(pixelsToBinary, pixelBinary, backgroundColor));
+  //Image::show("Watershed", image.getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor));
 
-  cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
-  Image::show("Black and White", blackWhite);
+  //cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
+  //Image::show("Black and White", blackWhite);
 
-  matrixPixels = Image::getPixelMatrix(blackWhite);
-  instructionDirection = analyzer.analyzeMatrixOfPixels(matrixPixels);
+  instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
 
   switch(instructionDirection)
   {
@@ -52,10 +51,10 @@ int main(int argc, char* argv[])
       break;
   }
 
-  if(!saveFilePath.empty())
-  {
-    cv::imwrite(saveFilePath, blackWhite);
-  }
+  //if(!saveFilePath.empty())
+  //{
+  //  cv::imwrite(saveFilePath, blackWhite);
+  //}
 
   cv::waitKey(0);
 
