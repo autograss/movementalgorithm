@@ -32,7 +32,7 @@ $(TARGET): $(OBJECTS)
 
 $(OBJ_DIR)/%.o: $(SOURCE_DIR)/%.$(SOURCE_EXT)
 	@mkdir -p $(OBJ_DIR)
-	@echo " $(CXX) $(INC) -c -o $@ $< $(CXXFLAGS)"; $(CXX) $(INC) -c -o $@ $< $(CXXFLAGS)
+	@echo " $(CXX) $(INC) -c -fPIC -o $@ $< $(CXXFLAGS)"; $(CXX) $(INC) -c -fPIC -o $@ $< $(CXXFLAGS)
 
 run: $(TARGET)
 	./$(BIN_DIR)/$(TARGET)

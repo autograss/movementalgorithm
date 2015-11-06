@@ -4,6 +4,8 @@
 
 #define PIXELS_ERROR 150
 #define MATRIX_DISPLACEMENT_ERROR 20
+#define DETECTION_RANGE 10
+#define BLACK_PIXELS_ERROR 30
 
 
 using namespace std;
@@ -27,6 +29,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vecto
 	int x = 0;
 	unsigned int i = 0;
 	int collumn_of_reference = -1;
+	int counter_of_black_pixels = 0;
 
 		for(unsigned int j=0; j<matrix[0].size()-1; j++) {
 			if(matrix[i][j+1] == 255 ){
@@ -40,12 +43,23 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vecto
 
 				if(i<matrix.size())
 					i++;
+			} 
+			else {
+				counter_of_black_pixels++;
+			}
+			
+			if (i == DETECTION_RANGE) {
+				//cout<<"Black Pixels: "<<counter_of_black_pixels<<endl;
 			}
 
-		      if( (j == matrix[0].size()-2) and (collumn_of_reference == -1) )  {
-        	      	j = 0;
+			if(i == DETECTION_RANGE && counter_of_black_pixels < BLACK_PIXELS_ERROR) {
+				return BlackWhiteAnalyzer::rotate_robot;
+			}
+
+		    if( (j == matrix[0].size()-2) and (collumn_of_reference == -1) )  {
+        		j = 0;
      			i++;
-     	              }
+     	    }
 		}
 
 		for(unsigned int j = 0 ; j < distance_from_column_of_reference.size(); j++) {
