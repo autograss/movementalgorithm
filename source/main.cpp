@@ -49,6 +49,9 @@ int main(int argc, char* argv[])
     case BlackWhiteAnalyzer::go_right:
       std::cout << "Ir para direita" << std::endl;
       break;
+    case BlackWhiteAnalyzer::rotate_robot:
+      std::cout << "Giro de 180 graus" << std::endl;
+      break;
   }
 
   //if(!saveFilePath.empty())
