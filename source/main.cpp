@@ -41,13 +41,13 @@ int main(int argc, char* argv[])
   switch(instructionDirection)
   {
     case BlackWhiteAnalyzer::go_foward:
-      std::cout << "Ir para frente" << std::endl;
+      std::cout << "move_foward" << std::endl;
       break;
     case BlackWhiteAnalyzer::go_left:
-      std::cout << "Ir para esquerda" << std::endl;
+      std::cout << "move_left" << std::endl;
       break;
     case BlackWhiteAnalyzer::go_right:
-      std::cout << "Ir para direita" << std::endl;
+      std::cout << "move_right" << std::endl;
       break;
   }
 
