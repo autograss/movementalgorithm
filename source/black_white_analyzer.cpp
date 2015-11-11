@@ -8,7 +8,6 @@
 #define MATRIX_DISPLACEMENT_ERROR 20
 #define BORDER_DOWN_AVERAGE_PIXELS_ERROR 5
 
-
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (std::vector<std::vector<int> > matrix) {
 
 	result = generateCommand(matrix);
