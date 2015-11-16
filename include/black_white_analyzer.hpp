@@ -16,7 +16,8 @@ class BlackWhiteAnalyzer
     typedef enum instruction {
     	go_foward = 0,
     	go_left,
-    	go_right
+    	go_right,
+	turn_180_left
     }instruction;
 
     instruction analyzeMatrixOfPixels (vector<vector<int> >);

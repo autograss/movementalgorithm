@@ -49,6 +49,8 @@ int main(int argc, char* argv[])
     case BlackWhiteAnalyzer::go_right:
       std::cout << "move_right" << std::endl;
       break;
+    case BlackWhiteAnalyzer::turn_180_left:
+      std::cout << "turn_180_left" << std::endl;
   }
 
   //if(!saveFilePath.empty())
