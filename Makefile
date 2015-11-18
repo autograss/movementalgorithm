@@ -23,7 +23,7 @@ OPENCVFLAGS		:= -lopencv_core -lopencv_imgproc -lopencv_highgui
 
 RM            := rm -f
 
-all: clean $(TARGET)
+all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(BIN_DIR)
