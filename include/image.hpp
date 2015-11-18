@@ -29,6 +29,8 @@ public:
   static std::vector< std::vector<int> > getPixelMatrix(cv::Mat image);
 private:
   cv::Mat cvImage;
+
+  cv::Mat removeBlackAndWhiteNoise(cv::Mat binary, int erodeWhite);
 };
 
 class WatershedSegmenter{

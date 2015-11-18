@@ -25,7 +25,8 @@ public:
   {
     CppUnit::TestSuite *suitOfTests = new CppUnit::TestSuite("BlackWhiteAnalyzerTest");
 
-    suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoFoward", &BlackWhiteAnalyzerTest::testGoFoward));
+    suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoFoward", &BlackWhiteAnalyzerTest::testGoFowardOne));
+    suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoFoward", &BlackWhiteAnalyzerTest::testGoFowardTwo));
     suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoLeftOne", &BlackWhiteAnalyzerTest::testGoLeftOne));
     suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoLeftTwo", &BlackWhiteAnalyzerTest::testGoLeftTwo));
     suitOfTests->addTest(new CppUnit::TestCaller<BlackWhiteAnalyzerTest>("testGoRightOne", &BlackWhiteAnalyzerTest::testGoRightOne));
@@ -34,14 +35,29 @@ public:
     return suitOfTests;
   }
 
-  void testGoFoward()
+  void testGoFowardOne()
   {
     unsigned int pixelBinary = 255;
     unsigned int pixelsToBinary = 100;
     unsigned int backgroundColor = 125;
 
     BlackWhiteAnalyzer analyzer;
-    Image image("test/images/go_foward.jpg");
+    Image image("test/images/go_foward_01.jpg");
+    BlackWhiteAnalyzer::instruction instruction;
+
+    instruction = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
+
+    CPPUNIT_ASSERT(instruction == BlackWhiteAnalyzer::go_foward);
+  }
+
+  void testGoFowardTwo()
+  {
+    unsigned int pixelBinary = 255;
+    unsigned int pixelsToBinary = 100;
+    unsigned int backgroundColor = 125;
+
+    BlackWhiteAnalyzer analyzer;
+    Image image("test/images/go_foward_02.jpg");
     BlackWhiteAnalyzer::instruction instruction;
 
     instruction = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);

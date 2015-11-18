@@ -17,7 +17,12 @@ cv::Mat
 Image::getBinaryImage(unsigned int pixelsToBinary, unsigned int pixelBinary)
 {
   cv::Mat binary;
-  cv::cvtColor(this->cvImage, binary, CV_BGR2GRAY);
+  if(this->cvImage.channels() == 3)
+  {
+    cv::cvtColor(this->cvImage, binary, CV_BGR2GRAY);
+  } else {
+    binary = this->cvImage.clone();
+  }
   cv::threshold(binary, binary, pixelsToBinary, pixelBinary, cv::THRESH_BINARY);
 
   return binary;
@@ -74,21 +79,38 @@ Image::getBinaryWatershedSegmenterImage(unsigned int pixelsToBinary, unsigned in
 cv::Mat
 Image::convertInBlackAndWhiteByStrip(unsigned int pixelsToBinary, unsigned int pixelBinary, unsigned int backgroundColor)
 {
+  int erodeWhite = 10;
   cv::Mat watershed = getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor);
 
-  for(int row = 0; row < watershed.rows; row++)
-  {
-    for(int col = 0; col < watershed.row(row).cols; col++)
-    {
-      unsigned int pixelColor = (unsigned int)watershed.at<uchar>(row, col);
-      if(pixelColor == backgroundColor)
-      {
-        watershed.row(row).col(col) = 0.0f;
-      }
-    }
-  }
+  cv::threshold(watershed, watershed, 254, 255, cv::THRESH_BINARY);
+
+  watershed = removeBlackAndWhiteNoise(watershed, erodeWhite);
 
   return watershed;
+}
+
+cv::Mat
+Image::removeBlackAndWhiteNoise(cv::Mat binary, int erodeWhite)
+{
+  cv::Mat foreground;
+  cv::erode(binary, foreground, cv::Mat(), cv::Point( -1, -1), erodeWhite);
+
+  cv::Mat background;
+  cv::dilate(binary, background, cv::Mat(), cv::Point(-1,-1), 2);
+  cv::threshold(background, background, 1, 100, cv::THRESH_BINARY_INV);
+
+  cv::Mat markers(binary.size(), CV_8U, cv::Scalar(0));
+  markers = foreground + background;
+
+  WatershedSegmenter segmenter;
+  segmenter.setMarkers(markers);
+
+  cv::Mat result = segmenter.process(this->cvImage);
+  result.convertTo(result, CV_8U);
+
+  cv::threshold(result, result, 254, 255, cv::THRESH_BINARY);
+
+  return result;
 }
 
 std::vector< std::vector<int> >
