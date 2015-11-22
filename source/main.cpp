@@ -2,6 +2,7 @@
 #include <string>
 #include "image.hpp"
 #include "black_white_analyzer.hpp"
+#include "grass_analyzer.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -23,8 +24,11 @@ int main(int argc, char* argv[])
   unsigned int backgroundColor = 125;
 
   BlackWhiteAnalyzer analyzer;
-  //std::vector< std::vector<int> > matrixPixels;
+  std::vector< std::vector<int> > matrixPixels;
   BlackWhiteAnalyzer::instruction instructionDirection;
+
+  GrassAnalyzer grassAnalyzer;
+  grassAnalyzer.find_line(image);
 
   //Image::show("Original", image.getCvImage());
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
@@ -58,7 +62,7 @@ int main(int argc, char* argv[])
   //  cv::imwrite(saveFilePath, blackWhite);
   //}
 
-  cv::waitKey(0);
+  //cv::waitKey(0);
 
   return 0;
 }
