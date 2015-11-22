@@ -1,7 +1,8 @@
-#include <opencv2/opencv.hpp>
+#include <opencv/cv.hpp>
 #include <string>
 #include "image.hpp"
 #include "black_white_analyzer.hpp"
+#include "grass_analyzer.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -22,9 +23,12 @@ int main(int argc, char* argv[])
   unsigned int pixelsToBinary = 100;
   unsigned int backgroundColor = 125;
 
-  BlackWhiteAnalyzer analyzer;
+  //BlackWhiteAnalyzer analyzer;
   //std::vector< std::vector<int> > matrixPixels;
-  BlackWhiteAnalyzer::instruction instructionDirection;
+  //BlackWhiteAnalyzer::instruction instructionDirection;
+
+  GrassAnalyzer grassAnalyzer;
+  grassAnalyzer.find_line(image);
 
   //Image::show("Original", image.getCvImage());
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
@@ -36,27 +40,27 @@ int main(int argc, char* argv[])
   //cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
   //Image::show("Black and White", blackWhite);
 
-  instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
+  //instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
 
-  switch(instructionDirection)
-  {
-    case BlackWhiteAnalyzer::go_foward:
-      std::cout << "move_foward" << std::endl;
-      break;
-    case BlackWhiteAnalyzer::go_left:
-      std::cout << "move_left" << std::endl;
-      break;
-    case BlackWhiteAnalyzer::go_right:
-      std::cout << "move_right" << std::endl;
-      break;
-  }
+ //switch(instructionDirection)
+ //{
+ //  case BlackWhiteAnalyzer::go_foward:
+ //    std::cout << "move_foward" << std::endl;
+ //    break;
+ //  case BlackWhiteAnalyzer::go_left:
+ //    std::cout << "move_left" << std::endl;
+ //    break;
+ //  case BlackWhiteAnalyzer::go_right:
+ //    std::cout << "move_right" << std::endl;
+ //    break;
+ //}
 
   //if(!saveFilePath.empty())
   //{
   //  cv::imwrite(saveFilePath, blackWhite);
   //}
 
-  cv::waitKey(0);
+  //cv::waitKey(0);
 
   return 0;
 }
