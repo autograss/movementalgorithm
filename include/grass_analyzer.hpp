@@ -6,6 +6,6 @@ using namespace std;
 class GrassAnalyzer
 {
     public:
-        Image find_line(Image image);
+        cv::Mat find_line(Image image);
 };
 
