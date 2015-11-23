@@ -24,11 +24,14 @@ public:
   int getHeight();
 
   cv::Mat getCvImage();
+  cv::Mat getYcbcrImage();
+  void setYcbcrImage(cv::Mat image);
 
   static void show(std::string label, cv::Mat image);
   static std::vector< std::vector<int> > getPixelMatrix(cv::Mat image);
 private:
   cv::Mat cvImage;
+  cv::Mat ycbcrImage;
 };
 
 class WatershedSegmenter{

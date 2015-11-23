@@ -6,6 +6,7 @@
 Image::Image(std::string imagePath)
 {
   this->cvImage = cv::imread(imagePath);
+
   if (this->cvImage.empty())
   {
     std::cerr << "Class Image - ERROR: Not read image " << imagePath << std::endl;
@@ -107,6 +108,17 @@ int
 Image::getHeight()
 {
   return this->cvImage.rows;
+}
+
+cv::Mat
+Image::getYcbcrImage()
+{
+   return this->ycbcrImage;
+}
+
+void Image::setYcbcrImage(cv::Mat ycbcrImage)
+{
+   this->ycbcrImage = ycbcrImage;
 }
 
 cv::Mat

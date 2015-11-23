@@ -28,9 +28,8 @@ int main(int argc, char* argv[])
   //BlackWhiteAnalyzer::instruction instructionDirection;
 
   GrassAnalyzer grassAnalyzer;
-  grassAnalyzer.find_line(image);
-
-  //Image::show("Original", image.getCvImage());
+  image = grassAnalyzer.find_line(image);
+  Image::show("Ycbcr", image.getYcbcrImage());
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
   //Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
   //Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
@@ -60,7 +59,7 @@ int main(int argc, char* argv[])
   //  cv::imwrite(saveFilePath, blackWhite);
   //}
 
-  //cv::waitKey(0);
+  cv::waitKey(0);
 
   return 0;
 }

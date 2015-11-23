@@ -6,6 +6,6 @@ using namespace std;
 class GrassAnalyzer
 {
     public:
-        void find_line(Image image);
+        Image find_line(Image image);
 };
 
