@@ -28,8 +28,8 @@ int main(int argc, char* argv[])
   //BlackWhiteAnalyzer::instruction instructionDirection;
 
   GrassAnalyzer grassAnalyzer;
-  image = grassAnalyzer.find_line(image);
-  Image::show("Ycbcr", image.getYcbcrImage());
+  cv::Mat ycbcr_y_channel = grassAnalyzer.find_line(image);
+  Image::show("Ycbcr", ycbcr_y_channel);
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
   //Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
   //Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
