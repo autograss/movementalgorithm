@@ -6,9 +6,12 @@
 
 using namespace std;
 
-void GrassAnalyzer::find_line(Image image)
+Image GrassAnalyzer::find_line(Image image)
 {
 
-    cv::cvtColor(image.getCvImage(), image.getCvImage(), CV_GRAY2BGR);
+    cv::Mat ycbr_image;
+    cv::cvtColor(image.getCvImage(), ycbr_image, CV_RGB2YCrCb);
+    image.setYcbcrImage(ycbr_image);
+    return image;
 
 }
