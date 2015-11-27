@@ -4,39 +4,80 @@
 
 #define PIXELS_ERROR 10
 #define MATRIX_DISPLACEMENT_ERROR 20
-#define LINE_PIXELS_ERROR 30
+#define BORDER_DOWN_AVERAGE_PIXELS_ERROR 5
 
 using namespace std;
 
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vector<vector<int> > matrix) {
 
-	BlackWhiteAnalyzer::instruction result = generateCommand(matrix);
+	result = generateCommand(matrix);
 
 	if(result == go_foward){
 		result =  verifyCenterMatrix(matrix);
 	}
 
+	result = verifyTurn180(matrix);
+
 	return result;
 }
+
+
+
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(vector<vector<int> > matrix) {
+
+
+  int borderDown = -1;
+  vector<int> distanceFromBorderDown;
+  unsigned int i = 0;
+
+  for(unsigned int j = 0; j < matrix[i].size()/4; j++)
+  {
+
+	    for(i = 0; i < matrix.size() - 10; i++)
+	    {
+
+	      if(matrix[i][j] == 255 && matrix[i+1][j] == 0){
+		 
+		if(borderDown == -1)
+	       	{
+	 	   borderDown = i;
+		}
+		else 
+		{
+		   distanceFromBorderDown.push_back(i);
+		}
+	     }
+
+	   }
+  }
+  double sum = accumulate(distanceFromBorderDown.begin(),distanceFromBorderDown.end(),0.0);
+  double mean = sum/distanceFromBorderDown.size();
+
+  if (mean < (borderDown+BORDER_DOWN_AVERAGE_PIXELS_ERROR)) {
+	return BlackWhiteAnalyzer::turn_180_left;	
+  }
+  else {
+
+ 	return result;
+  }
+
+}
+
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vector<int> > matrix) {
   int topLeft=-1, topRight=-1, bottomLeft=-1, bottomRight=-1;
   int x;
-  int countLineBeforeMiddle = 0;
+
+
+
+
+
+
   for(unsigned int i = 0; i < matrix.size(); i++)
   {
     for(unsigned int j = 0; j < matrix[i].size(); j++)
     {
-
-      if(matrix[i][j] == 255 && j < matrix[i].size()/2)
-       {
-	 if ((matrix[i+1][j] == 0) && i < (matrix.size())/2)
-	 {
-	    countLineBeforeMiddle++;
-	 }
-       }
-
 
       if(topLeft == -1)
       {
@@ -77,9 +118,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vecto
 
   x = ((topRight + topLeft) / 2) - ((bottomRight + bottomLeft) / 2);
 
-  if (countLineBeforeMiddle >= LINE_PIXELS_ERROR) {
-	return BlackWhiteAnalyzer::turn_180_left;	
-  }
+  
 
   if (x < -PIXELS_ERROR){
 	return BlackWhiteAnalyzer::go_left;

@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
   //Image::show("Markers", image.getBinaryMarkersImage(pixelsToBinary, pixelBinary, backgroundColor));
   //Image::show("Watershed", image.getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor));
 
-  //cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
-  //Image::show("Black and White", blackWhite);
+  cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
+  Image::show("Black and White", blackWhite);
 
   instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
 
