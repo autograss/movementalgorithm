@@ -1,15 +1,15 @@
 #include <iostream>
-#include "black_white_analyzer.hpp"
 #include <vector>
+#include <numeric>
+#include <cstdlib>
+#include "black_white_analyzer.hpp"
 
 #define PIXELS_ERROR 10
 #define MATRIX_DISPLACEMENT_ERROR 20
 #define BORDER_DOWN_AVERAGE_PIXELS_ERROR 5
 
-using namespace std;
 
-
-BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vector<vector<int> > matrix) {
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (std::vector<std::vector<int> > matrix) {
 
 	result = generateCommand(matrix);
 
@@ -24,11 +24,9 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (vecto
 
 
 
-BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(vector<vector<int> > matrix) {
-
-
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(std::vector<std::vector<int> > matrix) {
   int borderDown = -1;
-  vector<int> distanceFromBorderDown;
+  std::vector<int> distanceFromBorderDown;
   unsigned int i = 0;
 
   for(unsigned int j = 0; j < matrix[i].size()/4; j++)
@@ -38,12 +36,12 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(vector<vector<
 	    {
 
 	      if(matrix[i][j] == 255 && matrix[i+1][j] == 0){
-		 
+
 		if(borderDown == -1)
 	       	{
 	 	   borderDown = i;
 		}
-		else 
+		else
 		{
 		   distanceFromBorderDown.push_back(i);
 		}
@@ -51,11 +49,11 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(vector<vector<
 
 	   }
   }
-  double sum = accumulate(distanceFromBorderDown.begin(),distanceFromBorderDown.end(),0.0);
+  double sum = std::accumulate(distanceFromBorderDown.begin(),distanceFromBorderDown.end(),0.0);
   double mean = sum/distanceFromBorderDown.size();
 
   if (mean < (borderDown+BORDER_DOWN_AVERAGE_PIXELS_ERROR)) {
-	return BlackWhiteAnalyzer::turn_180_left;	
+	return BlackWhiteAnalyzer::turn_180_left;
   }
   else {
 
@@ -64,79 +62,46 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(vector<vector<
 
 }
 
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector< std::vector<int> > matrix) {
+  int diferenceResult = 255;
+  std::vector<int> vectorX;
+  std::vector<int> vectorY;
 
-BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(vector<vector<int> > matrix) {
-  int topLeft=-1, topRight=-1, bottomLeft=-1, bottomRight=-1;
-  int x;
-
-
-
-
-
-
-  for(unsigned int i = 0; i < matrix.size(); i++)
+  //std::cout << "Diference: " << std::endl;
+  for(unsigned int i = 1; i < matrix.size(); i++)
   {
-    for(unsigned int j = 0; j < matrix[i].size(); j++)
-    {
-
-      if(topLeft == -1)
+    for(unsigned int j = 1; j < matrix.size(); j++) {
+      //std::cout << (matrix[i][j] - matrix[i][j-1]) << ", ";
+      if(matrix[i][j] - matrix[i][j-1] == diferenceResult)
       {
-        if(matrix[i][j] == 255)
-          topLeft = j;
-      }
-      else if(topRight == -1)
-      {
-        if(matrix[i][j] == 0)
-          topRight = j-1;
-      }
-      else
-      {
-        break;
-      }
-    }
-  }
-  for(int i = matrix.size()-1; i >= 0; i--)
-  {
-    for(int j = matrix[i].size()-1; j >= 0; j--)
-    {
-      if(bottomRight == -1)
-      {
-        if(matrix[i][j] == 255)
-          bottomRight = j;
-      }
-      else if(bottomLeft == -1)
-      {
-        if(matrix[i][j] == 0)
-          bottomLeft = j-1;
-      }
-      else
-      {
-        break;
+        vectorX.push_back(i);
+        vectorY.push_back(j);
       }
     }
   }
 
-  x = ((topRight + topLeft) / 2) - ((bottomRight + bottomLeft) / 2);
+  //std::cout << "=================" << std::endl;
 
-  
+  double slopeLine = slope(vectorX, vectorY);
 
-  if (x < -PIXELS_ERROR){
-	return BlackWhiteAnalyzer::go_left;
+  //std::cout << "slopeLine: " << slopeLine << std::endl;
+
+  if(abs(slopeLine) > 8.0)
+  {
+    return BlackWhiteAnalyzer::go_foward;
   }
-  else if (x == 0 || (x > -PIXELS_ERROR && x < PIXELS_ERROR)) {
-	return BlackWhiteAnalyzer::go_foward;
+  else if (slopeLine > 0.0)
+  {
+    return BlackWhiteAnalyzer::go_left;
   }
-  else if (x > PIXELS_ERROR) {
-	return BlackWhiteAnalyzer::go_right;
+  else
+  {
+    return BlackWhiteAnalyzer::go_right;
   }
-
-  return BlackWhiteAnalyzer::go_foward;
-
-
 }
 
 
-BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyCenterMatrix(vector<vector<int> > matrix) {
+BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyCenterMatrix(std::vector< std::vector<int> > matrix) {
 
 	unsigned int number_of_collumns = matrix[0].size();
 	unsigned int number_of_lines = matrix.size();
@@ -188,10 +153,6 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyCenterMatrix(vector<ve
 	return BlackWhiteAnalyzer::go_foward;
 }
 
-
-
-
-
 BlackWhiteAnalyzer::instruction
 BlackWhiteAnalyzer::getInstruction (Image image, unsigned int pixelsToBinary,
                                     unsigned int pixelBinary, unsigned int backgroundColor)
@@ -203,3 +164,30 @@ BlackWhiteAnalyzer::getInstruction (Image image, unsigned int pixelsToBinary,
     matrixPixels = Image::getPixelMatrix(blackWhite);
     return analyzer.analyzeMatrixOfPixels(matrixPixels);
 }
+
+double
+BlackWhiteAnalyzer::slope(const std::vector<int>& x, const std::vector<int>& y) {
+    const auto n = x.size();
+    const auto s_x = std::accumulate(x.begin(), x.end(), 0.0);
+    const auto s_y = std::accumulate(y.begin(), y.end(), 0.0);
+    const auto s_xx = std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
+    const auto s_xy = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
+    const auto numerator = (n * s_xx - s_x * s_x);
+    const auto denominator = (n * s_xy - s_x * s_y);
+
+    //std::cout << "n: " << n << std::endl;
+    //std::cout << "s_x: " << s_x << std::endl;
+    //std::cout << "s_y: " << s_y << std::endl;
+    //std::cout << "s_xx: " << s_xx << std::endl;
+    //std::cout << "s_xy: " << s_xy << std::endl;
+    //std::cout << "numerator: " << numerator << std::endl;
+    //std::cout << "denominator: " << denominator << std::endl;
+
+    if(denominator == 0)
+    {
+      return 0.0;
+    }
+
+    return numerator / denominator;
+}
+

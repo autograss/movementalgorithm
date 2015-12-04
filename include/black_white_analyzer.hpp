@@ -10,26 +10,27 @@ const int HEIGHT_SIZE = 50;
 
 class BlackWhiteAnalyzer
 {
-  public:
-    BlackWhiteAnalyzer(){};
+public:
+  BlackWhiteAnalyzer(){};
 
-    typedef enum instruction {
-    	go_foward = 0,
-    	go_left,
-    	go_right,
-	turn_180_left
-    }instruction;
+  typedef enum instruction {
+    go_foward = 0,
+    go_left,
+    go_right,
+turn_180_left
+  }instruction;
 
-    BlackWhiteAnalyzer::instruction result;
+  BlackWhiteAnalyzer::instruction result;
 
-    instruction analyzeMatrixOfPixels (vector<vector<int> >);
-    instruction generateCommand (vector<vector<int> >);
-    instruction verifyCenterMatrix (vector<vector<int> >);
-    instruction verifyTurn180 (vector<vector<int> >);
+  instruction analyzeMatrixOfPixels (vector<vector<int> >);
+  instruction generateCommand (vector<vector<int> >);
+  instruction verifyCenterMatrix (vector<vector<int> >);
+  instruction verifyTurn180 (vector<vector<int> >);
 
-    instruction getInstruction (Image image, unsigned int pixelsToBinary,
-                                unsigned int pixelBinary, unsigned int backgroundColor);
+  instruction getInstruction (Image image, unsigned int pixelsToBinary,
+                              unsigned int pixelBinary, unsigned int backgroundColor);
 
-  private:
+private:
+  double slope(const std::vector<int>& x, const std::vector<int>& y);
 };
 #endif
