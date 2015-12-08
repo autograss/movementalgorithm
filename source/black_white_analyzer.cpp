@@ -62,18 +62,17 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::verifyTurn180(std::vector<st
 }
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector< std::vector<int> > matrix) {
-  int diferenceResult = 255;
   std::vector<int> vectorX;
   std::vector<int> vectorY;
 
   //std::cout << "Diference: " << std::endl;
   for(unsigned int i = 1; i < matrix.size(); i++)
   {
-    for(unsigned int j = 1; j < matrix.size(); j++) {
+    for(unsigned int j = 1; j < matrix[i].size(); j++) {
       //std::cout << (matrix[i][j] - matrix[i][j-1]) << ", ";
-      if(matrix[i][j] - matrix[i][j-1] == diferenceResult)
+      if(matrix[i][j] - matrix[i][j-1] > 0)
       {
-        vectorX.push_back(i);
+        vectorX.push_back(matrix.size() - i);
         vectorY.push_back(j);
       }
     }
@@ -83,13 +82,14 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
 
   double slopeLine = slope(vectorX, vectorY);
 
+
   //std::cout << "slopeLine: " << slopeLine << std::endl;
 
-  if(abs(slopeLine) > 8.0)
+  if(abs(slopeLine) < 0.12)
   {
     return BlackWhiteAnalyzer::go_foward;
   }
-  else if (slopeLine > 0.0)
+  else if (slopeLine < 0.0)
   {
     return BlackWhiteAnalyzer::go_left;
   }
@@ -171,8 +171,8 @@ BlackWhiteAnalyzer::slope(const std::vector<int>& x, const std::vector<int>& y) 
     const auto s_y = std::accumulate(y.begin(), y.end(), 0.0);
     const auto s_xx = std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
     const auto s_xy = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
-    const auto numerator = (n * s_xx - s_x * s_x);
-    const auto denominator = (n * s_xy - s_x * s_y);
+    const auto numerator = (n * s_xy - s_x * s_y);
+    const auto denominator = (n * s_xx - s_x * s_x);
 
     //std::cout << "n: " << n << std::endl;
     //std::cout << "s_x: " << s_x << std::endl;
