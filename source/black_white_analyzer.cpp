@@ -72,8 +72,8 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
       //std::cout << (matrix[i][j] - matrix[i][j-1]) << ", ";
       if(matrix[i][j] - matrix[i][j-1] > 0)
       {
-        vectorX.push_back(matrix.size() - i);
-        vectorY.push_back(j);
+        vectorY.push_back(matrix.size() - i);
+        vectorX.push_back(j);
       }
     }
   }
@@ -85,7 +85,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
 
   //std::cout << "slopeLine: " << slopeLine << std::endl;
 
-  if(abs(slopeLine) < 0.12)
+  if(abs(slopeLine) > 8.0)
   {
     return BlackWhiteAnalyzer::go_foward;
   }
@@ -166,13 +166,13 @@ BlackWhiteAnalyzer::getInstruction (Image image, unsigned int pixelsToBinary,
 
 double
 BlackWhiteAnalyzer::slope(const std::vector<int>& x, const std::vector<int>& y) {
-    const auto n = x.size();
-    const auto s_x = std::accumulate(x.begin(), x.end(), 0.0);
-    const auto s_y = std::accumulate(y.begin(), y.end(), 0.0);
-    const auto s_xx = std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
-    const auto s_xy = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
-    const auto numerator = (n * s_xy - s_x * s_y);
-    const auto denominator = (n * s_xx - s_x * s_x);
+    long double n = x.size();
+    long double s_x = std::accumulate(x.begin(), x.end(), 0.0);
+    long double s_y = std::accumulate(y.begin(), y.end(), 0.0);
+    long double s_xx = std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
+    long double s_xy = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
+    long double numerator = (n * s_xy - s_x * s_y);
+    long double denominator = (n * s_xx - s_x * s_x);
 
     //std::cout << "n: " << n << std::endl;
     //std::cout << "s_x: " << s_x << std::endl;
@@ -184,9 +184,9 @@ BlackWhiteAnalyzer::slope(const std::vector<int>& x, const std::vector<int>& y) 
 
     if(denominator == 0)
     {
-      return 0.0;
+      return 100.0;
     }
 
-    return numerator / denominator;
+    return (double)(numerator / denominator);
 }
 

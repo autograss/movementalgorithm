@@ -18,7 +18,7 @@ LIB           :=
 INC           := -I $(INCLUDE_DIR)
 
 CXX           := g++-4.9
-CXXFLAGS      := -g -W -O3 -pedantic -Wall -ansi -std=c++11
+CXXFLAGS      := -g -W -O3 -pedantic -Wall -ansi -Wno-long-long -std=c++11
 OPENCVFLAGS		:= -lopencv_core -lopencv_imgproc -lopencv_highgui
 
 RM            := rm -f
