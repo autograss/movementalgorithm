@@ -19,9 +19,9 @@ int main(int argc, char* argv[])
   }
 
   Image image(argv[1]);
-  unsigned int pixelBinary = 255;
-  unsigned int pixelsToBinary = 100;
-  unsigned int backgroundColor = 125;
+  //unsigned int pixelBinary = 255;
+  //unsigned int pixelsToBinary = 120;
+  //unsigned int backgroundColor = 125;
 
   BlackWhiteAnalyzer analyzer;
   std::vector< std::vector<int> > matrixPixels;
@@ -36,15 +36,16 @@ int main(int argc, char* argv[])
   //Image::show("Markers", image.getBinaryMarkersImage(pixelsToBinary, pixelBinary, backgroundColor));
   //Image::show("Watershed", image.getBinaryWatershedSegmenterImage(pixelsToBinary, pixelBinary, backgroundColor));
 
-  cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
-  Image::show("Black and White", blackWhite);
+  //cv::Mat blackWhite = image.convertInBlackAndWhiteByStrip(pixelsToBinary, pixelBinary, backgroundColor);
+  //Image::show("Black and White", blackWhite);
 
-  instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
+  //instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
+  instructionDirection = analyzer.generateCommand(Image::getPixelMatrix(ycbcr_y_channel));
 
   switch(instructionDirection)
   {
     case BlackWhiteAnalyzer::go_foward:
-      std::cout << "move_foward" << std::endl;
+      std::cout << "move_forward" << std::endl;
       break;
     case BlackWhiteAnalyzer::go_left:
       std::cout << "move_left" << std::endl;

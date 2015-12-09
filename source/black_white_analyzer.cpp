@@ -16,7 +16,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (std::
 		result =  verifyCenterMatrix(matrix);
 	}
 
-	result = verifyTurn180(matrix);
+	//result = verifyTurn180(matrix);
 
 	return result;
 }
