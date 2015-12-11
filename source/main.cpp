@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
   GrassAnalyzer grassAnalyzer;
   cv::Mat ycbcr_y_channel = grassAnalyzer.find_line(image);
-  Image::show("Ycbcr", ycbcr_y_channel);
+  //Image::show("Ycbcr", ycbcr_y_channel);
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
   //Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
   //Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
   //Image::show("Black and White", blackWhite);
 
   //instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
-  instructionDirection = analyzer.generateCommand(Image::getPixelMatrix(ycbcr_y_channel));
+  instructionDirection = analyzer.analyzeMatrixOfPixels(Image::getPixelMatrix(ycbcr_y_channel));
 
   switch(instructionDirection)
   {

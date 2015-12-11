@@ -8,15 +8,52 @@
 #define MATRIX_DISPLACEMENT_ERROR 20
 #define BORDER_DOWN_AVERAGE_PIXELS_ERROR 5
 
+BlackWhiteAnalyzer::instruction
+BlackWhiteAnalyzer::checkSlope(std::vector<std::vector<int> > matrix)
+{
+  unsigned int i = matrix.size() / 2;
+  unsigned int first = 0, second = matrix[i].size()-1;
+
+  for(unsigned int j = 1; j < matrix[i].size(); j++)
+  {
+    if(matrix[i][j] - matrix[i][j-1] > 0)
+    {
+      first = j;
+    }
+    if(matrix[i][j] - matrix[i][j-1] < 0)
+    {
+      second = j;
+    }
+  }
+
+  //cout << "===========" << endl;
+  //cout << "first: " << first << endl;
+  //cout << "second: " << second << endl;
+  //cout << "matrix[i].size()/3: " << (matrix[i].size()/3) << endl;
+  //cout << "matrix[i].size() * 2 / 3: " << (matrix[i].size() * 2 / 3) << endl;
+  //cout << "===========" << endl;
+
+  if( (first == 0) && (second == matrix[i].size()-1) )
+    return BlackWhiteAnalyzer::none;
+
+  if(first < matrix[i].size()/3)
+    return BlackWhiteAnalyzer::go_left;
+
+  if(second > matrix[i].size() * 2 / 3)
+    return BlackWhiteAnalyzer::go_right;
+
+  return BlackWhiteAnalyzer::go_foward;
+}
+
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (std::vector<std::vector<int> > matrix) {
 
-	result = generateCommand(matrix);
+    result = checkSlope(matrix);
 
 	if(result == go_foward){
-		result =  verifyCenterMatrix(matrix);
+	    result = generateCommand(matrix);
 	}
 
-	//result = verifyTurn180(matrix);
+	result = verifyTurn180(matrix);
 
 	return result;
 }
@@ -85,7 +122,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
 
   //std::cout << "slopeLine: " << slopeLine << std::endl;
 
-  if(abs(slopeLine) > 8.0)
+  if(abs(slopeLine) > 20.0)
   {
     return BlackWhiteAnalyzer::go_foward;
   }

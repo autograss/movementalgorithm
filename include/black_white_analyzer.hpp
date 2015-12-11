@@ -17,6 +17,7 @@ public:
     go_foward = 0,
     go_left,
     go_right,
+    none,
 turn_180_left
   }instruction;
 
@@ -32,5 +33,6 @@ turn_180_left
 
 private:
   double slope(const std::vector<int>& x, const std::vector<int>& y);
+  BlackWhiteAnalyzer::instruction checkSlope(std::vector<std::vector<int> > matrix);
 };
 #endif
