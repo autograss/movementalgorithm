@@ -23,13 +23,13 @@ int main(int argc, char* argv[])
   //unsigned int pixelsToBinary = 120;
   //unsigned int backgroundColor = 125;
 
-  BlackWhiteAnalyzer analyzer;
-  std::vector< std::vector<int> > matrixPixels;
-  BlackWhiteAnalyzer::instruction instructionDirection;
+ //BlackWhiteAnalyzer analyzer;
+ //std::vector< std::vector<int> > matrixPixels;
+ //BlackWhiteAnalyzer::instruction instructionDirection;
 
-  GrassAnalyzer grassAnalyzer;
-  cv::Mat ycbcr_y_channel = grassAnalyzer.find_line(image);
-  //Image::show("Ycbcr", ycbcr_y_channel);
+ GrassAnalyzer grassAnalyzer;
+ cv::Mat ycbcr_y_channel = grassAnalyzer.find_line(image);
+ Image::show("Ycbcr", ycbcr_y_channel);
   //Image::show("Binary", image.getBinaryImage(pixelsToBinary, pixelBinary));
   //Image::show("Foreground", image.getBinaryForegroundImage(pixelsToBinary, pixelBinary));
   //Image::show("Background", image.getBinaryBackgroundImage(pixelsToBinary, pixelBinary, backgroundColor));
