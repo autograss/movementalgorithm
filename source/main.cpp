@@ -40,22 +40,22 @@ int main(int argc, char* argv[])
   //Image::show("Black and White", blackWhite);
 
   //instructionDirection = analyzer.getInstruction(image, pixelsToBinary, pixelBinary, backgroundColor);
-  instructionDirection = analyzer.analyzeMatrixOfPixels(Image::getPixelMatrix(ycbcr_y_channel));
+  //instructionDirection = analyzer.analyzeMatrixOfPixels(Image::getPixelMatrix(ycbcr_y_channel));
 
-  switch(instructionDirection)
-  {
-    case BlackWhiteAnalyzer::go_foward:
-      std::cout << "move_forward" << std::endl;
-      break;
-    case BlackWhiteAnalyzer::go_left:
-      std::cout << "move_left" << std::endl;
-      break;
-    case BlackWhiteAnalyzer::go_right:
-      std::cout << "move_right" << std::endl;
-      break;
-    case BlackWhiteAnalyzer::turn_180_left:
-      std::cout << "turn_180_left" << std::endl;
-  }
+ //switch(instructionDirection)
+ //{
+ //  case BlackWhiteAnalyzer::go_foward:
+ //    std::cout << "move_forward" << std::endl;
+ //    break;
+ //  case BlackWhiteAnalyzer::go_left:
+ //    std::cout << "move_left" << std::endl;
+ //    break;
+ //  case BlackWhiteAnalyzer::go_right:
+ //    std::cout << "move_right" << std::endl;
+ //    break;
+ //  case BlackWhiteAnalyzer::turn_180_left:
+ //    std::cout << "turn_180_left" << std::endl;
+ //}
 
   //if(!saveFilePath.empty())
   //{

@@ -15,14 +15,22 @@ cv::Mat GrassAnalyzer::find_line(Image image)
 
     cv::Mat blurred_image;
 
-    medianBlur(ycbcr_channels[0], blurred_image, 51);
+    medianBlur(ycbr_image, blurred_image, 41);
 
     cv::Mat bin_image;
     threshold(blurred_image, bin_image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
 
-    cv::Mat final_image;
-    threshold(bin_image, final_image, 0, 255, cv::THRESH_BINARY);
+    cv::Mat threshold_image;
+    threshold(bin_image, threshold_image, 0, 255, cv::THRESH_BINARY);
 
-    return final_image;
+    float data[7][7] = {{1,1,1,1,1,1,1}, {1,1,1,1,1,1,1}};
+
+    cv::Mat kernel = cv::Mat(2, 5, CV_32FC1, &data);
+
+
+    cv::Mat dilate_image;
+    dilate(threshold_image, dilate_image, kernel);
+
+    return dilate_image;
 
 }
