@@ -10,10 +10,8 @@ cv::Mat GrassAnalyzer::find_line(Image image)
 {
 
     cv::Mat ycbr_image;
-    cv::cvtColor(image.getCvImage(), ycbr_image, CV_RGB2YCrCb);
+    cv::cvtColor(image.getCvImage(), ycbr_image, CV_RGB2GRAY);
     image.setYcbcrImage(ycbr_image);
-    cv::Mat ycbcr_channels[3];
-    split(ycbr_image, ycbcr_channels);
 
     cv::Mat blurred_image;
 
