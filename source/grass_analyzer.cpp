@@ -31,8 +31,16 @@ cv::Mat GrassAnalyzer::find_line(Image image)
     cv::Mat dilate_image;
     dilate(threshold_image, dilate_image, kernel);
 
-    return entropy(dilate_image);
+    cv::Mat entropy_image =  entropy(dilate_image);
 
+    cv::Mat entropy2_image;
+    threshold(entropy_image, entropy2_image, 204, 255, cv::THRESH_BINARY);
+
+    removeSmallBlobs(entropy2_image, 2000);
+
+    return entropy2_image;
+
+    //img.convertTo( dimg, CV_64FC3, 1.0/255.0 );
 
 }
 
@@ -184,4 +192,23 @@ int32_t GrassAnalyzer::sub_to_ind(int32_t *coords, int32_t *cumprod, int32_t num
 
     return index;
 
+}
+
+void GrassAnalyzer::removeSmallBlobs(cv::Mat& im, double size)
+{
+    unsigned int value = 1;
+    if (im.channels() != value || im.type() != CV_8U)
+        return;
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findContours(im.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+
+    for (int i = 0; i < contours.size(); i++)
+    {
+        // Calculate contour area
+        double area = cv::contourArea(contours[i]);
+
+        // Remove small objects by drawing the contour with black color
+        if (area > 0 && area <= size)
+            cv::drawContours(im, contours, i, CV_RGB(0,0,0), -1);
+    }
 }
