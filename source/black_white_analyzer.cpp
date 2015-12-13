@@ -13,6 +13,21 @@ BlackWhiteAnalyzer::checkSlope(std::vector<std::vector<int> > matrix)
 {
   unsigned int i = matrix.size() / 2;
   unsigned int first = 0, second = matrix[i].size()-1;
+  unsigned int numWhitePixels = 0, numBlackPixels = 0;
+
+  for(unsigned int i = 1; i < matrix.size(); i++)
+  {
+    for(unsigned int j = 1; j < matrix[i].size(); j++)
+    {
+      if(matrix[i][j] == 0)
+        numBlackPixels++;
+      else
+        numWhitePixels++;
+    }
+  }
+
+  if(numWhitePixels >= numBlackPixels)
+    return BlackWhiteAnalyzer::none;
 
   for(unsigned int j = 1; j < matrix[i].size(); j++)
   {
@@ -31,7 +46,6 @@ BlackWhiteAnalyzer::checkSlope(std::vector<std::vector<int> > matrix)
   //cout << "second: " << second << endl;
   //cout << "matrix[i].size()/3: " << (matrix[i].size()/3) << endl;
   //cout << "matrix[i].size() * 2 / 3: " << (matrix[i].size() * 2 / 3) << endl;
-  //cout << "===========" << endl;
 
   if( (first == 0) && (second == matrix[i].size()-1) )
     return BlackWhiteAnalyzer::none;
@@ -47,13 +61,13 @@ BlackWhiteAnalyzer::checkSlope(std::vector<std::vector<int> > matrix)
 
 BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::analyzeMatrixOfPixels (std::vector<std::vector<int> > matrix) {
 
-    result = checkSlope(matrix);
+  result = checkSlope(matrix);
 
 	if(result == go_foward){
 	    result = generateCommand(matrix);
 	}
 
-	result = verifyTurn180(matrix);
+	//result = verifyTurn180(matrix);
 
 	return result;
 }
@@ -107,7 +121,11 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
   {
     for(unsigned int j = 1; j < matrix[i].size(); j++) {
       //std::cout << (matrix[i][j] - matrix[i][j-1]) << ", ";
-      if(matrix[i][j] - matrix[i][j-1] > 0)
+      if(matrix[i][j] - matrix[i][j-1] != 0)
+      {
+        vectorY.push_back(matrix.size() - i);
+        vectorX.push_back(j);
+      } else if(matrix[i][j] - matrix[i-1][j] != 0)
       {
         vectorY.push_back(matrix.size() - i);
         vectorX.push_back(j);
@@ -122,11 +140,7 @@ BlackWhiteAnalyzer::instruction BlackWhiteAnalyzer::generateCommand(std::vector<
 
   //std::cout << "slopeLine: " << slopeLine << std::endl;
 
-  if(abs(slopeLine) > 20.0)
-  {
-    return BlackWhiteAnalyzer::go_foward;
-  }
-  else if (slopeLine < 0.0)
+  if (slopeLine < 0.0)
   {
     return BlackWhiteAnalyzer::go_left;
   }
