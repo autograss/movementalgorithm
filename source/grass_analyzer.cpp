@@ -40,8 +40,6 @@ cv::Mat GrassAnalyzer::find_line(Image image)
 
     return entropy2_image;
 
-    //img.convertTo( dimg, CV_64FC3, 1.0/255.0 );
-
 }
 
 
@@ -61,11 +59,9 @@ void GrassAnalyzer::getLocalEntropyImage(cv::Mat gray, cv::Rect roi, cv::Mat ent
     using namespace cv;
     clock_t func_begin, func_end;
     func_begin = clock();
-    //1.define nerghbood model,here it's 9*9
     int neighbood_dim = 2;
     int neighbood_size[] = {9, 9};
 
-    //2.Pad gray_src
     Mat gray_src_mat(gray);
     Mat pad_mat;
     int left = (neighbood_size[0] - 1) / 2;
@@ -154,8 +150,6 @@ void GrassAnalyzer::getLocalEntropyImage(cv::Mat gray, cv::Rect roi, cv::Mat ent
     free(neighbood_corrds_array);
 
     func_end = clock();
-    double func_time = (double)(func_end - func_begin) / CLOCKS_PER_SEC;
-    std::cout << "func time" << func_time << std::endl;
 }
 
 void GrassAnalyzer::ind_to_sub(int p, int num_dims, int *cumprod, int *coords)
